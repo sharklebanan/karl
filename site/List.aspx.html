@@ -1,0 +1,385 @@
+<head>
+    <title>
+        List - KARL
+    </title>
+    <link rel="stylesheet" href="/CSS/AllCSS.css">
+    <meta property="og:url" content="https://karl.xo.je/Default.aspx>">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="KickAss Revival List (KARL)">
+    <meta property="og:description" content="A frontend for VandGD's revival list, written in JQuery. Adds QOL features like sorting, Lormex playercounts, searching, and filters.">
+    <meta property="og:image" content="https://revival-list.com/logo/Roblox2016.png">
+</head>
+<body>
+    <!-- all the roblox shit will be really unclean with linebreaks lol
+    too lazy to fix -->
+    <div id="MasterContainer">
+        <div id="Container">
+
+
+            <div id="ctl00_cphBannerAd_topAdPanel">
+
+                <div id="AdvertisingLeaderboard">
+
+
+                    <div style="overflow: hidden;">
+
+                        <div id="ctl00_cphBannerAd_HomeTopBannerAd_OutsideAdPanel" class="AdPanel">
+
+                            <iframe id="ctl00_cphBannerAd_HomeTopBannerAd_AsyncAdIFrame" allowtransparency="true" frameborder="0" scrolling="no" height="90" src="/web/20100706160957if_/http://www.roblox.com/Ads/IFrameAdContent.aspx?v=2&amp;slot=Roblox_Home_Top_728x90&amp;format=banner&amp;v=2" width="728" data-ruffle-polyfilled=""></iframe>
+
+                        </div>
+                        <a id="ctl00_cphBannerAd_HomeTopBannerAd_ReportAdButton" title="click to report this website" class="BadAdButton" href='javascript:alert("NO! As long as the developers don&apos;t profit off of it, old Roblox revivals are NOT ILLEGAL! Using Roblox&apos;s (mostly unlicensed) assets as a part of an online private server should not qualify as unlawful use of copyrighted content! If the developers do profit off of these private servers, it&apos;s mostly to keep their websites running, and to provide better and more accurate services for these private servers!");'>[ report ]</a>
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div id="Header">
+                <div id="Banner">
+
+                    <a id="Logo" href="/Default.aspx" style="cursor: pointer; border: none;"></a>
+
+                </div>
+                <div class="Navigation">
+
+                    <ul id="ctl00_Menu_MenuUL">
+                        <li><a href="/Default.aspx">Home</a></li>
+                        <li><a href="/List.aspx">List</a></li>
+                        <li><a href="https://discord.gg/RqhWsmWatx">Discord</a></li>
+                        <li><a href="javascript:alert('why would there be an admin panel dumbass'); window.location.href = 'https://revival-list.com/403.html';">Admin Panel</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="Body">
+                <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+                <div style="width: 876px; height: 28px; clear: both; display: block; background-color: #006699;" class="StandardBox">
+                    <table width="876px" border="0">
+                        <tbody>
+                            <tr>
+                                <td style="font-family: Verdana, Helvetica, Sans-Serif; font-size: 12pt; color: White;
+                            font-weight: bold; text-align: left;">
+                                    Search:
+                                </td>
+                                <td style="text-align: right;">
+                                    <span class="SearchBox"><input type="text" maxlength="100" id="searchBox" style="width: 400px;"></span>
+                                    Sort by:
+                                    <select id="sortBy">
+                                        <option value="status">Status</option>
+                                        <option value="year">Client year</option>
+                                        <option value="az">Alphabetical</option>
+                                        <option value="lormex">Lormex playercount</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button onclick="refreshLormex();">Refresh Playercounts (use if all revivals are N/A)</button> | <button onclick="refreshList(true); refreshLormex();">Refresh List</button><br><br>
+                <table class="Grid" cellspacing="0" cellpadding="4" border="0" width="900">
+                    <tbody id="revtable">
+                        <tr class="GridHeader">
+                            <th scope="col">Logo</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Clients</th>
+                            <th scope="col">Lormex</th>
+                        </tr>
+                        <tr class="GridItem">
+                            <td>Please wait, fetching...</td>
+                        </tr>
+                    </tbody>
+                    <script>
+                        // if you cant already tell im really new to JQuery LOL!!!!!!!!!!!!
+                        // if it works, it works, ok?
+                        function refreshLormex() {
+                            $.getJSON("https://karl.xo.je/ScrewCORSAgain.ashx", function (data) {
+                                $.each(data.items, function (key, val) {
+                                    $('a:contains("' + val.name + '")').closest('tr').children('td:contains("N/A")').html(val.dynamic.online);
+                                    $('td:contains("' + val.name + '")').closest('tr').children('td:contains("N/A")').html(val.dynamic.online);
+                                });
+                            });
+                        }
+                        function refreshList(remove) {
+                            if (remove == true) {
+                                $("#revtable").children('.GridItem, .GridItemAlt').remove();
+                            }
+                            // screw cors
+                            $.ajax({
+                                url: "https://karl.xo.je/ScrewCORS.ashx", success: function (response) {
+                                    $("#revtable").children(".GridItem").remove();
+                                    $("#listcontent").html(response);
+                                    var childless;
+                                    var splitstring;
+                                    var splitstring2;
+                                    // jank ass
+                                    $('#public').children('p').each(function (index) {
+                                        // WHY THE FUCK ARE THERE EMPTY P TAGS
+                                        if ($(this).html() == "") {
+                                            return;
+                                        }
+                                        if ($(this).children('a').first().children('img').first().length) {
+                                            $(this).prepend($(this).children('a').first().html().replace('ⁱ', ''));
+                                            $(this).children('a').first().remove();
+                                        }
+                                        childless = $(this).clone();
+                                        childless.children().remove();
+                                        splitstring = childless.html().split("(");
+                                        splitstring2 = splitstring[1].split(")");
+                                        $(this).children('img').first().prop('src', 'https://revival-list.com/' + $(this).children('img').first().prop('src').replace('https://karl.xo.je/', ''));
+                                        if ($(this).children('a').first().length) {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Public</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Public</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        } else {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Public</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Public</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        }
+                                    });
+                                    $('#private').children('p').each(function (index) {
+                                        if ($(this).html() == "") {
+                                            return;
+                                        }
+                                        if ($(this).children('a').first().children('img').first().length) {
+                                            $(this).prepend($(this).children('a').first().html().replace('ⁱ', ''));
+                                            $(this).children('a').first().remove();
+                                        }
+                                        childless = $(this).clone();
+                                        childless.children().remove();
+                                        splitstring = childless.html().split("(");
+                                        splitstring2 = splitstring[1].split(")");
+                                        $(this).children('img').first().prop('src', 'https://revival-list.com/' + $(this).children('img').first().prop('src').replace('https://karl.xo.je/', ''));
+                                        if ($(this).children('a').first().length) {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Private</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Private</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        } else {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Private</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Private</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        }
+                                    });
+                                    $('#wip').children('p').each(function (index) {
+                                        if ($(this).html() == "") {
+                                            return;
+                                        }
+                                        if ($(this).children('a').first().children('img').first().length) {
+                                            $(this).prepend($(this).children('a').first().html().replace('ⁱ', ''));
+                                            $(this).children('a').first().remove();
+                                        }
+                                        childless = $(this).clone();
+                                        childless.children().remove();
+                                        splitstring = childless.html().split("(");
+                                        splitstring2 = splitstring[1].split(")");
+                                        $(this).children('img').first().prop('src', 'https://revival-list.com/' + $(this).children('img').first().prop('src').replace('https://karl.xo.je/', ''));
+                                        if ($(this).children('a').first().length) {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Work in progress</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Work in progress</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        } else {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Work in progress</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Work in progress</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        }
+                                    });
+                                    $('#launcher').children('p').each(function (index) {
+                                        if ($(this).html() == "") {
+                                            return;
+                                        }
+                                        if ($(this).children('a').first().children('img').first().length) {
+                                            $(this).prepend($(this).children('a').first().html().replace('ⁱ', ''));
+                                            $(this).children('a').first().remove();
+                                        }
+                                        childless = $(this).clone();
+                                        childless.children().remove();
+                                        splitstring = childless.html().split("(");
+                                        splitstring2 = splitstring[1].split(")");
+                                        $(this).children('img').first().prop('src', 'https://revival-list.com/' + $(this).children('img').first().prop('src').replace('https://karl.xo.je/', ''));
+                                        if ($(this).children('a').first().length) {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Launcher</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Launcher</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        } else {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Launcher</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Launcher</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        }
+                                    });
+                                    $('#dead').children('p').each(function (index) {
+                                        if ($(this).html() == "") {
+                                            return;
+                                        }
+                                        if ($(this).children('a').first().children('img').first().length) {
+                                            $(this).prepend($(this).children('a').first().html().replace('ⁱ', ''));
+                                            $(this).children('a').first().remove();
+                                        }
+                                        childless = $(this).clone();
+                                        childless.children().remove();
+                                        splitstring = childless.html().split("(");
+                                        splitstring2 = splitstring[1].split(")");
+                                        $(this).children('img').first().prop('src', 'https://revival-list.com/' + $(this).children('img').first().prop('src').replace('https://karl.xo.je/', ''));
+                                        if ($(this).children('a').first().length) {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Dead</td><td>' + splitstring2[1] + '</td><td>None</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Dead</td><td>' + splitstring2[1] + '</td><td>None</td></tr>');
+                                            }
+                                        } else {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Dead</td><td>' + splitstring2[1] + '</td><td>None</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Dead</td><td>' + splitstring2[1] + '</td><td>None</td></tr>');
+                                            }
+                                        }
+                                    });
+                                    // screw simulators they go last
+                                    $('#simu').children('p').each(function (index) {
+                                        if ($(this).html() == "") {
+                                            return;
+                                        }
+                                        if ($(this).children('a').first().children('img').first().length) {
+                                            $(this).prepend($(this).children('a').first().html().replace('ⁱ', ''));
+                                            $(this).children('a').first().remove();
+                                        }
+                                        childless = $(this).clone();
+                                        childless.children().remove();
+                                        splitstring = childless.html().split("(");
+                                        splitstring2 = splitstring[1].split(")");
+                                        $(this).children('img').first().prop('src', 'https://revival-list.com/' + $(this).children('img').first().prop('src').replace('https://karl.xo.je/', ''));
+                                        if ($(this).children('a').first().length) {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Simulator</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Simulator</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        } else {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Simulator</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Simulator</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        }
+                                    });
+                                    $('#dont').children('p').each(function (index) {
+                                        if ($(this).html() == "") {
+                                            return;
+                                        }
+                                        if ($(this).children('a').first().children('img').first().length) {
+                                            $(this).prepend($(this).children('a').first().html().replace('ⁱ', ''));
+                                            $(this).children('a').first().remove();
+                                        }
+                                        childless = $(this).clone();
+                                        childless.children().remove();
+                                        splitstring = childless.html().split("(");
+                                        splitstring2 = splitstring[1].split(")");
+                                        $(this).children('img').first().prop('src', 'https://revival-list.com/' + $(this).children('img').first().prop('src').replace('https://karl.xo.je/', ''));
+                                        if ($(this).children('a').first().length) {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Don&apos;t play</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td><a href="' + $(this).children('a').first().prop('href') + '">' + splitstring[0] + '</a></td><td>Don&apos;t playr</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        } else {
+                                            if (index % 2 === 0) {
+                                                $("#revtable").append('<tr class="GridItemAlt"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Don&apos;t play</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            } else {
+                                                $("#revtable").append('<tr class="GridItem"><td>' + $(this).children('img').first().prop('outerHTML') + '</td><td>' + splitstring[0] + '</td><td>Don&apos;t play</td><td>' + splitstring2[1] + '</td><td>N/A</td></tr>');
+                                            }
+                                        }
+                                    });
+                                    $('#listcontent').children().remove();
+                                }
+                            });
+                        }
+                        $(document).ready(function () {
+                            refreshList(false);
+                            refreshLormex();
+                        });
+                        $('#searchBox').on('input', function () {
+                            $('#revtable').children('tr:not(.filtered)').css('display', 'revert');
+                            $('#revtable').find('td:nth-child(2)').each(function () {
+                                if ($(this).children('a').first().length) {
+                                    if ($(this).children('a').first().html().toLowerCase().includes($('#searchBox').val())) {
+                                        console.log('Doing Nothing(tm)');
+                                    } else {
+                                        $(this).parent().css('display', 'none');
+                                    }
+                                } else {
+                                    if ($(this).html().toLowerCase().includes($('#searchBox').val())) {
+                                        console.log('Doing Nothing(tm)');
+                                    } else {
+                                        $(this).parent().css('display', 'none');
+                                    }
+                                }
+                            });
+                        });
+                        $('#sortBy').change(function () {
+                            alert('TBA.'); /*
+                                                if ($(this).val() == 'az') {
+                                                    $('#listcontent').append($('#revtable').clone());
+                                                    $('#revtable').remove();
+                                                } else {
+
+                                                }*/
+                        });
+                    </script>
+                    <div style="display: none;" id="listcontent"></div>
+                </table>
+                <div id="Footer">
+                    <hr>
+                    <!--
+                <div class="FooterNav">
+                    <a id="ctl00_rbxFooter_PrivacyHyperLink" href="/web/20100722094202/http://www.roblox.com/info/Privacy.aspx"><b>Privacy Policy</b></a>
+                    &nbsp;|&nbsp;
+                    <a id="ctl00_rbxFooter_AdvertiseHyperLink" href="http://web.archive.org/web/20100722094202/http://sales.roblox.com/">Advertise with Us</a>
+                    &nbsp;|&nbsp;
+                    <a id="ctl00_rbxFooter_ContactHyperLink" href="/web/20100722094202/http://www.roblox.com/info/ContactUs.aspx">Contact Us</a>
+                    &nbsp;|&nbsp;
+                    <a id="ctl00_rbxFooter_AboutHyperLink" href="/web/20100722094202/http://www.roblox.com/info/About.aspx">About Us</a>
+                    &nbsp;|&nbsp;
+                    <a id="ctl00_rbxFooter_FreeGamesHyperLink" href="/web/20100722094202/http://www.roblox.com/FreeGames.aspx">Free Games</a>
+                    &nbsp;|&nbsp;
+                    <a id="ctl00_rbxFooter_JobsHyperLink" href="http://web.archive.org/web/20100722094202/http://jobs.roblox.com/">Jobs</a>
+                </div>
+                <hr>
+                <div class="FoooterNav">
+                <a href="/web/20100722094202/http://www.roblox.com/town-and-city-games" title="Town and City Games">Town and City</a>&nbsp;|&nbsp;
+                <a href="/web/20100722094202/http://www.roblox.com/medieval-games" title="Medieval Games">Medieval</a>&nbsp;|&nbsp;
+                <a href="/web/20100722094202/http://www.roblox.com/sci-fi-games" title="Sci-Fi Games">Sci-Fi</a>&nbsp;|&nbsp;
+                <a href="/web/20100722094202/http://www.roblox.com/ninja-games" title="Ninja Games">Ninja</a>&nbsp;|&nbsp;
+                <a href="/web/20100722094202/http://www.roblox.com/scary-games" title="Scary Games">Scary</a>&nbsp;|&nbsp;
+                <a href="/web/20100722094202/http://www.roblox.com/pirate-games" title="Pirate Games">Pirate</a>&nbsp;|&nbsp;
+                <a href="/web/20100722094202/http://www.roblox.com/adventure-games" title="Adventure Games">Adventure</a>&nbsp;|&nbsp;
+                <a href="/web/20100722094202/http://www.roblox.com/funny-games" title="Funny Games">Funny</a>&nbsp;|&nbsp;
+                <a href="/web/20100722094202/http://www.roblox.com/wild-west-cowboy-games" title="Wild West Cowboy Games">Wild West</a>
+                <a href="/web/20100722094202/http://www.roblox.com/war-games" title="War Games">War</a>&nbsp;|&nbsp;
+                <a href="/web/20100722094202/http://www.roblox.com/skatepark-games" title="Skate Park Games">Skate Park</a>
+                </div>
+                <hr>-->
+                    <p class="Legalese">
+                        KARL is not affiliated with Roblox Corp. Made by <a href="mailto:sharklebanan@hotmail.com">Sharklebanan</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
