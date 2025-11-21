@@ -110,15 +110,14 @@
                                 $("#revtable").children('.GridItem, .GridItemAlt').remove();
                             }
                             // screw cors
-                            $.ajax({
-                                url: "https://karl.xo.je/ScrewCORS.ashx", success: function (response) {
-                                    $("#revtable").children(".GridItem").remove();
-                                    $("#listcontent").html(response);
+                            // edit: now that i have no access to php i will use an iframe
+                            // still, screw cors.
+                            $("#revtable").children(".GridItem").remove();
                                     var childless;
                                     var splitstring;
                                     var splitstring2;
                                     // jank ass
-                                    $('#public').children('p').each(function (index) {
+                                    $('#listcontent').contents.find('#public').children('p').each(function (index) {
                                         // WHY THE FUCK ARE THERE EMPTY P TAGS
                                         if ($(this).html() == "") {
                                             return;
@@ -310,8 +309,6 @@
                                         }
                                     });
                                     $('#listcontent').children().remove();
-                                }
-                            });
                         }
                         $(document).ready(function () {
                             refreshList(false);
@@ -345,7 +342,7 @@
                                                 }*/
                         });
                     </script>
-                    <div style="display: none;" id="listcontent"></div>
+                    <iframe src="http://revival-list.com/List" style="display: none;" id="listcontent"></iframe>
                 </table>
                 <div id="Footer">
                     <hr>
