@@ -145,7 +145,7 @@
                                             }
                                         }
                                     });
-                                    $('#private').children('p').each(function (index) {
+                                    $('#listcontent').contents().find('#private').children('p').each(function (index) {
                                         if ($(this).html() == "") {
                                             return;
                                         }
@@ -172,7 +172,7 @@
                                             }
                                         }
                                     });
-                                    $('#wip').children('p').each(function (index) {
+                                    $('#listcontent').contents().find('#wip').children('p').each(function (index) {
                                         if ($(this).html() == "") {
                                             return;
                                         }
@@ -199,7 +199,7 @@
                                             }
                                         }
                                     });
-                                    $('#launcher').children('p').each(function (index) {
+                                    $('#listcontent').contents().find('#launcher').children('p').each(function (index) {
                                         if ($(this).html() == "") {
                                             return;
                                         }
@@ -226,7 +226,7 @@
                                             }
                                         }
                                     });
-                                    $('#dead').children('p').each(function (index) {
+                                    $('#listcontent').contents().find('#dead').children('p').each(function (index) {
                                         if ($(this).html() == "") {
                                             return;
                                         }
@@ -254,7 +254,7 @@
                                         }
                                     });
                                     // screw simulators they go last
-                                    $('#simu').children('p').each(function (index) {
+                                    $('#listcontent').contents().find('#simu').children('p').each(function (index) {
                                         if ($(this).html() == "") {
                                             return;
                                         }
@@ -281,7 +281,7 @@
                                             }
                                         }
                                     });
-                                    $('#dont').children('p').each(function (index) {
+                                    $('#listcontent').contents().find('#dont').children('p').each(function (index) {
                                         if ($(this).html() == "") {
                                             return;
                                         }
@@ -308,7 +308,6 @@
                                             }
                                         }
                                     });
-                                    $('#listcontent').children().remove();
                         }
                         $(document).ready(function () {
                             refreshList(false);
@@ -342,7 +341,7 @@
                                                 }*/
                         });
                     </script>
-                    <iframe src="http://revival-list.com/List" style="display: none;" id="listcontent"></iframe>
+                    <iframe src="https://revival-list.com/List" style="display: none;" id="listcontent"></iframe>
                 </table>
                 <div id="Footer">
                     <hr>
