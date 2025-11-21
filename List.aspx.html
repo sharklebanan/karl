@@ -117,7 +117,7 @@
                                     var splitstring;
                                     var splitstring2;
                                     // jank ass
-                                    $('#listcontent').contents.find('#public').children('p').each(function (index) {
+                                    $('#listcontent').contents().find('#public').children('p').each(function (index) {
                                         // WHY THE FUCK ARE THERE EMPTY P TAGS
                                         if ($(this).html() == "") {
                                             return;
